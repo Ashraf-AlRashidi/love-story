@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Love Story Generator | أنشئ قصة حبك 💕</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Marhey&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --primary: #ff0055;
+            --dark: #120509;
+            --gradient: linear-gradient(135deg, #1a0b12 0%, #000000 100%);
+            --glass: rgba(255, 255, 255, 0.08);
+        }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--dark);
+            background-image: var(--gradient);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid var(--primary);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 0 0 50px rgba(255, 0, 85, 0.3);
+        }
+
+        h1 {
+            font-family: 'Marhey';
+            font-size: 2.5rem;
+            color: var(--primary);
+            text-align: center;
+            margin-bottom: 10px;
+            animation: heartbeat 1.5s infinite;
+        }
+
+        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+
+        .subtitle {
+            text-align: center;
+            color: #aaa;
+            margin-bottom: 30px;
+            font-size: 1rem;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #eee;
+        }
+
+        input, textarea, select {
+            width: 100%;
+            padding: 12px;
+            border-radius: 10px;
+            border: 2px solid #333;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            font-family: 'Cairo', sans-serif;
+            font-size: 1rem;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus, textarea:focus, select:focus {
+            border-color: var(--primary);
+            transform: scale(1.02);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, var(--primary), #ff6b6b);
+            color: white;
+            border: none;
+            padding: 14px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            font-family: 'Marhey';
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 0, 85, 0.4);
+            width: 100%;
+            margin-top: 10px;
+        }
+
+        .btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 5px 25px rgba(255, 0, 85, 0.6);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .form-section {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .section-title {
+            font-size: 1.1rem;
+            color: var(--primary);
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .two-columns {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        @media (max-width: 600px) {
+            .two-columns {
+                grid-template-columns: 1fr;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+            .container {
+                padding: 20px;
+            }
+        }
+
+        .info-box {
+            background: rgba(255, 0, 85, 0.1);
+            border-left: 3px solid var(--primary);
+            padding: 12px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .required {
+            color: var(--primary);
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>❤️ Love Story</h1>
+        <p class="subtitle">اصنع موقع حبك الخاص بك وشاركه مع حبيبك 💕</p>
+
+        <div class="info-box">
+            <i class="fas fa-info-circle"></i> املأ البيانات وهنعمل لك رابط خاص تقدر تشاركه
+        </div>
+
+        <form id="loveForm">
+            <!-- القسم 1: الأسماء والتاريخ -->
+            <div class="form-section">
+                <div class="section-title">🎯 البيانات الأساسية</div>
+                
+                <div class="two-columns">
+                    <div class="form-group">
+                        <label>اسمك <span class="required">*</span></label>
+                        <input type="text" name="yourName" placeholder="مثلاً: أشرف" required>
+                    </div>
+                    <div class="form-group">
+                        <label>اسم حبيبك <span class="required">*</span></label>
+                        <input type="text" name="partnerName" placeholder="مثلاً: منى" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>تاريخ البداية <span class="required">*</span></label>
+                    <input type="datetime-local" name="startDate" required>
+                </div>
+
+                <div class="form-group">
+                    <label>كلمة الدخول (اختياري)</label>
+                    <input type="text" name="password" placeholder="مثلاً: 11/11 (تاريخ ميلاده)">
+                </div>
+            </div>
+
+            <!-- القسم 2: الرسالة الرئيسية -->
+            <div class="form-section">
+                <div class="section-title">💌 الرسالة الرئيسية</div>
+                <div class="form-group">
+                    <label>الرسالة التي بتبغا تكتبها <span class="required">*</span></label>
+                    <textarea name="mainMessage" placeholder="اكتب رسالتك الحلوة هنا..." required></textarea>
+                </div>
+            </div>
+
+            <!-- القسم 3: الأسباب (ليه أنتي) -->
+            <div class="form-section">
+                <div class="section-title">🤔 ليه هو/هي بالذات؟</div>
+                <div class="form-group">
+                    <label>السبب 1 <span class="required">*</span></label>
+                    <input type="text" name="reason1" placeholder="مثلاً: عشان حنيتك عليا" required>
+                </div>
+                <div class="form-group">
+                    <label>السبب 2 <span class="required">*</span></label>
+                    <input type="text" name="reason2" placeholder="مثلاً: عشان أنتي رزق ربنا ليا" required>
+                </div>
+                <div class="form-group">
+                    <label>السبب 3 <span class="required">*</span></label>
+                    <input type="text" name="reason3" placeholder="مثلاً: عشان بتفهميني من عيني" required>
+                </div>
+            </div>
+
+            <!-- القسم 4: الوسائط -->
+            <div class="form-section">
+                <div class="section-title">📸 الوسائط (صور وموسيقى)</div>
+                
+                <div class="form-group">
+                    <label>رابط الموسيقى الخلفية (يوتيوب أو رابط مباشر)</label>
+                    <input type="url" name="musicUrl" placeholder="https://example.com/song.mp3">
+                </div>
+
+                <div class="form-group">
+                    <label>روابط الصور (كل رابط في سطر)</label>
+                    <textarea name="imagesUrls" placeholder="https://example.com/image1.jpg&#10;https://example.com/image2.jpg&#10;https://example.com/image3.jpg"></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label>رابط صوتك (اختياري - لقسم السينما)</label>
+                    <input type="url" name="voiceUrl" placeholder="https://example.com/myvoice.mp3">
+                </div>
+            </div>
+
+            <!-- القسم 5: الرسائل اليومية -->
+            <div class="form-section">
+                <div class="section-title">📅 رسائل يومية (اختياري)</div>
+                <div class="form-group">
+                    <label>أول رسالة يوم 1</label>
+                    <input type="text" name="msg1" placeholder="مثلاً: كل سنة وأنتي معايا">
+                </div>
+                <div class="form-group">
+                    <label>رسالة يوم 2</label>
+                    <input type="text" name="msg2" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label>رسالة يوم 3</label>
+                    <input type="text" name="msg3" placeholder="">
+                </div>
+                <p style="font-size: 0.85rem; color: #aaa; margin-top: 10px;">
+                    💡 يمكنك إضافة رسايل أكتر بعد الإنشاء من الموقع نفسه
+                </p>
+            </div>
+
+            <!-- الرسالة الختامية -->
+            <div class="form-section">
+                <div class="section-title">👑 الرسالة الختامية</div>
+                <div class="form-group">
+                    <label>الرسالة الختامية (الجزء الأخير)</label>
+                    <textarea name="finalMessage" placeholder="مثلاً: بحبك يا..."></textarea>
+                </div>
+            </div>
+
+            <button type="submit" class="btn">
+                <i class="fas fa-heart"></i> اصنع موقع حبي الآن!
+            </button>
+        </form>
+    </div>
+
+    <script>
+        document.getElementById('loveForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            // جمع البيانات
+            const formData = {
+                yourName: document.querySelector('input[name="yourName"]').value,
+                partnerName: document.querySelector('input[name="partnerName"]').value,
+                startDate: document.querySelector('input[name="startDate"]').value,
+                password: document.querySelector('input[name="password"]').value || "11/11",
+                mainMessage: document.querySelector('textarea[name="mainMessage"]').value,
+                reason1: document.querySelector('input[name="reason1"]').value,
+                reason2: document.querySelector('input[name="reason2"]').value,
+                reason3: document.querySelector('input[name="reason3"]').value,
+                musicUrl: document.querySelector('input[name="musicUrl"]').value,
+                imagesUrls: document.querySelector('textarea[name="imagesUrls"]').value.split('\n').filter(url => url.trim()),
+                voiceUrl: document.querySelector('input[name="voiceUrl"]').value,
+                msg1: document.querySelector('input[name="msg1"]').value || "رسالة يوم 1",
+                msg2: document.querySelector('input[name="msg2"]').value || "رسالة يوم 2",
+                msg3: document.querySelector('input[name="msg3"]').value || "رسالة يوم 3",
+                finalMessage: document.querySelector('textarea[name="finalMessage"]').value || "بحبك ❤️"
+            };
+
+            // تشفير البيانات (Base64)
+            const encoded = btoa(JSON.stringify(formData));
+            
+            // إنشاء الرابط
+            const link = `love-page.html?data=${encoded}`;
+            
+            // عرض الرابط في popup
+            const shareUrl = window.location.origin + window.location.pathname.replace('index.html', '') + link;
+            
+            showShareModal(shareUrl);
+        });
+
+        function showShareModal(url) {
+            const modal = document.createElement('div');
+            modal.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0,0,0,0.8);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 10000;
+            `;
+
+            modal.innerHTML = `
+                <div style="
+                    background: #1a0b12;
+                    padding: 30px;
+                    border-radius: 20px;
+                    text-align: center;
+                    border: 2px solid #ff0055;
+                    max-width: 500px;
+                    width: 90%;
+                ">
+                    <h2 style="color: #ff0055; margin-bottom: 20px; font-family: 'Marhey';">✨ تم إنشاء موقعك! ✨</h2>
+                    
+                    <p style="color: #aaa; margin-bottom: 20px;">انسخ الرابط وشاركه مع حبيبك:</p>
+                    
+                    <div style="
+                        background: rgba(255,255,255,0.1);
+                        padding: 15px;
+                        border-radius: 10px;
+                        margin-bottom: 20px;
+                        word-break: break-all;
+                        color: #eee;
+                        font-size: 0.9rem;
+                    ">
+                        ${url}
+                    </div>
+                    
+                    <button onclick="
+                        navigator.clipboard.writeText('${url}');
+                        this.innerText = 'تم النسخ! ✓';
+                        this.style.background = '#00cc55';
+                        setTimeout(() => this.innerText = 'انسخ الرابط', 2000);
+                    " style="
+                        background: #ff0055;
+                        color: white;
+                        border: none;
+                        padding: 12px 30px;
+                        border-radius: 25px;
+                        cursor: pointer;
+                        font-size: 1rem;
+                        margin-right: 10px;
+                        transition: 0.3s;
+                    ">
+                        📋 انسخ الرابط
+                    </button>
+                    
+                    <button onclick="window.location.href = '${url}'" style="
+                        background: #8e44ad;
+                        color: white;
+                        border: none;
+                        padding: 12px 30px;
+                        border-radius: 25px;
+                        cursor: pointer;
+                        font-size: 1rem;
+                        transition: 0.3s;
+                    ">
+                        👀 اعرض الموقع
+                    </button>
+                    
+                    <br><br>
+                    
+                    <button onclick="location.reload()" style="
+                        background: transparent;
+                        color: #aaa;
+                        border: 1px solid #aaa;
+                        padding: 10px 25px;
+                        border-radius: 25px;
+                        cursor: pointer;
+                        transition: 0.3s;
+                    ">
+                        إنشاء موقع جديد
+                    </button>
+                    
+                    <button onclick="this.parentElement.parentElement.remove()" style="
+                        position: absolute;
+                        top: 10px;
+                        right: 15px;
+                        background: none;
+                        border: none;
+                        color: #aaa;
+                        font-size: 1.5rem;
+                        cursor: pointer;
+                    ">
+                        ✕
+                    </button>
+                </div>
+            `;
+
+            document.body.appendChild(modal);
+        }
+    </script>
+
+</body>
+</html>
