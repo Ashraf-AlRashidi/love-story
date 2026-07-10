@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>❤️ Love Story</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Marhey&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #ff0055;
+            --dark: #120509;
+            --gradient: linear-gradient(135deg, #1a0b12 0%, #000000 100%);
+            --glass: rgba(255, 255, 255, 0.08);
+            --gold: #ffd700;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Cairo', sans-serif;
+            background: var(--dark);
+            background-image: var(--gradient);
+            color: white;
+            min-height: 100vh;
+            text-align: center;
+            overflow-x: hidden;
+            padding-bottom: 80px;
+        }
+
+        /* مطر القلوب */
+        .heart-rain {
+            position: fixed;
+            top: -10vh;
+            color: var(--primary);
+            z-index: 9999;
+            animation: fall linear forwards;
+        }
+        @keyframes fall { to { transform: translateY(110vh); } }
+
+        /* شاشة الدخول */
+        #login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 10000;
+            transition: opacity 1s ease;
+        }
+
+        .login-card {
+            background: rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            border: 1px solid var(--primary);
+            box-shadow: 0 0 50px rgba(255, 0, 85, 0.3);
+            text-align: center;
+        }
+
+        input {
+            padding: 12px;
+            border-radius: 25px;
+            border: 2px solid #333;
+            text-align: center;
+            font-size: 1.1rem;
+            margin: 15px 0;
+            width: 80%;
+            outline: none;
+            transition: 0.3s;
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+        input:focus { border-color: var(--primary); transform: scale(1.05); }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 30px;
+            border-radius: 25px;
+            font-size: 1.1rem;
+            cursor: pointer;
+            font-family: 'Marhey';
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(255, 0, 85, 0.4);
+        }
+        .btn:hover { transform: scale(1.1); box-shadow: 0 5px 25px rgba(255, 0, 85, 0.6); }
+
+        /* المحتوى الرئيسي */
+        #main-content { display: none; padding: 15px; }
+
+        .title-main {
+            font-family: 'Marhey';
+            font-size: 2.2rem;
+            color: var(--primary);
+            margin: 30px 0;
+            animation: heartbeat 1.5s infinite;
+        }
+        @keyframes heartbeat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.1); } }
+
+        /* الكارت الزجاجي */
+        .card {
+            background: var(--glass);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 20px;
+            margin: 20px auto;
+            max-width: 600px;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: slideUp 0.8s forwards;
+        }
+        @keyframes slideUp { to { transform: translateY(0); opacity: 1; } }
+
+        .message-text {
+            font-size: 1.1rem;
+            line-height: 1.9;
+            white-space: pre-line;
+            text-align: center;
+            color: #eee;
+        }
+        .highlight { color: var(--primary); font-weight: bold; }
+
+        #typewriter-text {
+            border-left: 2px solid var(--primary);
+            padding-left: 5px;
+        }
+
+        /* العداد */
+        .counter-box {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+        .time-unit {
+            background: rgba(0,0,0,0.6);
+            padding: 10px;
+            min-width: 70px;
+            border-radius: 12px;
+            border: 1px solid var(--primary);
+        }
+        .time-unit span { display: block; font-size: 1.5rem; font-weight: bold; color: var(--primary); }
+        .time-unit label { font-size: 0.8rem; color: #bbb; }
+
+        /* كارت Flip */
+        .why-you-grid {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .flip-card {
+            background-color: transparent;
+            width: 100px;
+            height: 100px;
+            perspective: 1000px;
+            cursor: pointer;
+        }
+        .flip-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            text-align: center;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        .flip-card.flipped .flip-card-inner { transform: rotateY(180deg); }
+        .flip-front, .flip-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            border: 1px solid var(--primary);
+        }
+        .flip-front { background: rgba(255,255,255,0.05); color: white; font-size: 2rem; }
+        .flip-back { background: var(--primary); color: white; transform: rotateY(180deg); font-size: 0.8rem; padding: 5px; }
+
+        /* السلايدر */
+        .slider-container {
+            position: relative;
+            width: 100%;
+            height: 350px;
+            overflow: hidden;
+            border-radius: 15px;
+            margin-top: 15px;
+        }
+        .slide-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: none;
+            animation: fade 1.5s;
+        }
+        @keyframes fade { from {opacity: 0.4} to {opacity: 1} }
+
+        /* زرار المفاجأة */
+        .surprise-btn {
+            background: linear-gradient(45deg, #ff0055, #ff6b6b);
+            margin: 20px 0;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0% {box-shadow: 0 0 0 0 rgba(255, 0, 85, 0.7);} 70% {box-shadow: 0 0 0 15px rgba(255, 0, 85, 0);} 100% {box-shadow: 0 0 0 0 rgba(255, 0, 85, 0);} }
+
+        /* مشغل الموسيقى */
+        .music-fab {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            background: white;
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(255,0,85,0.5);
+            z-index: 5000;
+        }
+        .rotating { animation: spin 4s linear infinite; }
+        @keyframes spin { 100% {transform: rotate(360deg);} }
+
+        /* قسم الأيام */
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 8px;
+            max-height: 350px;
+            overflow-y: auto;
+            padding: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .day-box {
+            aspect-ratio: 1/1;
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.8rem;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .day-box.locked { opacity: 0.5; background: #1a1a1a; cursor: not-allowed; }
+        .day-box.unlocked { 
+            background: var(--primary); color: white; 
+            box-shadow: 0 0 10px var(--primary); font-weight: bold; 
+            transform: scale(1.05); border-color: white; 
+        }
+
+        .cinema-btn {
+            background: linear-gradient(45deg, #8e44ad, #ff0055);
+            width: 100%; margin-bottom: 20px; font-size: 1rem;
+            animation: glow-btn 2s infinite alternate;
+        }
+        @keyframes glow-btn { from {box-shadow: 0 0 5px #8e44ad;} to {box-shadow: 0 0 20px #ff0055;} }
+
+        .cinema-overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: black; z-index: 20000;
+            display: none; flex-direction: column; justify-content: center; align-items: center;
+            opacity: 0; transition: opacity 1s;
+        }
+        .cinema-content { text-align: center; color: white; }
+        .beating-heart { font-size: 5rem; animation: heartbeat 1s infinite; }
+
+        @media (max-width: 600px) {
+            .title-main { font-size: 1.8rem; }
+            .card { padding: 15px; margin: 15px auto; }
+            .slider-container { height: 250px; }
+            .why-you-grid { gap: 8px; }
+            .flip-card { width: 80px; height: 80px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div id="login-screen">
+        <div class="login-card">
+            <h1 style="font-family: 'Marhey'; color: var(--primary); margin-bottom: 10px;" id="title-login">💕 Love Story</h1>
+            <p style="margin-bottom: 10px;">🔒 اكتب كلمة الدخول عشان تدخل</p>
+            <input type="text" id="password" placeholder="أدخل الرمز" autocomplete="off">
+            <br>
+            <button class="btn" onclick="checkPass()">Unlock ❤️</button>
+            <p id="error" style="color: #ff3333; display: none; margin-top: 15px; font-weight: bold;">
+                غلط يا حبيبي.. ركزي 😉
+            </p>
+        </div>
+    </div>
+
+    <div id="main-content">
+
+        <h2 class="title-main" id="main-title">❤️ Happy Love Day ❤️</h2>
+
+        <div class="card" style="min-height: 200px;">
+            <h3 id="card-hello" style="color: var(--primary); margin-bottom: 15px;">إلى أغلى ما في حياتي 🌏</h3>
+            <p id="typewriter-text" class="message-text"></p>
+        </div>
+
+        <button class="btn surprise-btn" onclick="rainHearts()">✨ دوسي هنا ✨</button>
+
+        <div class="card">
+            <h3>قصة حبنا بدأت من.. ⏳</h3>
+            <h4 id="start-date" style="color: var(--gold); font-family: 'Marhey'; margin-top: 5px;">...</h4>
+            <div class="counter-box">
+                <div class="time-unit"><span id="days">0</span><label>يوم</label></div>
+                <div class="time-unit"><span id="hours">0</span><label>ساعة</label></div>
+                <div class="time-unit"><span id="minutes">0</span><label>دقيقة</label></div>
+                <div class="time-unit"><span id="seconds">0</span><label>ثانية</label></div>
+            </div>
+            <p style="font-size: 0.8rem; margin-top: 10px; color: #aaa;">وكل ثانية بتعدي بحبك أكتر ❤️</p>
+        </div>
+
+        <div class="card">
+            <h3>ليه أنتي بالذات؟ 🤔❤️</h3>
+            <div class="why-you-grid" id="reasons-container"></div>
+            <p style="font-size: 0.8rem; margin-top: 15px; color: #bbb;">(دوسي على المربعات عشان تعرفي 😉)</p>
+        </div>
+
+        <div class="card">
+            <h3>ذكرياتنا الحلوة 📸</h3>
+            <div class="slider-container" id="slider-container">
+                <!-- الصور بتتضاف من JS -->
+            </div>
+        </div>
+
+        <div class="card" style="border: 1px solid var(--primary);">
+            <h3 style="margin-bottom: 10px; color: var(--gold);">📅 رحلة الـ 365 رسالة</h3>
+            <p style="font-size: 0.9rem; margin-bottom: 20px; color: #ccc;">
+                كل يوم ليكي رسالة جديدة.. ممنوع الغش 😉❤️
+            </p>
+
+            <button class="btn cinema-btn" onclick="openCinemaMode()">
+                <i class="fas fa-headphones-alt"></i> اسمعي دي بصوتي 🎤
+            </button>
+
+            <div class="days-grid" id="days-container"></div>
+
+            <div id="forever-div" style="display: none; margin-top: 30px;">
+                <p>انتهت السنة.. بس حبنا لسه بيبتدي ♾️</p>
+                <button class="btn" onclick="alert('Forever Mode Activated! 💍❤️\\nحبك في قلبي ملوش نهاية!')">
+                    Activate Forever Mode 🚀
+                </button>
+            </div>
+        </div>
+
+        <div class="card" style="border-color: var(--gold);">
+            <h3 style="color: var(--primary); margin-bottom: 10px;">👑 الرسالة الأخيرة</h3>
+            <p class="message-text" id="final-message"></p>
+        </div>
+
+        <h2 class="title-main">✨ Happy Love Day ✨</h2>
+        <p style="opacity: 0.7; font-size: 0.8rem;">Made with Love by <b>Copilot 💻❤️</b></p>
+
+    </div>
+
+    <div id="cinema-overlay" class="cinema-overlay" onclick="closeCinemaMode()">
+        <div class="cinema-content">
+            <div class="beating-heart">❤️</div>
+            <p style="margin-top: 20px; font-size: 1.2rem;">This is how my heart sounds when it loves you...</p>
+            <p style="font-size: 0.8rem; color: #aaa;">(دوسي في أي حتة عشان تقفلي)</p>
+        </div>
+    </div>
+
+    <audio id="bg-music" loop></audio>
+    <audio id="special-song"></audio>
+
+    <div class="music-fab" onclick="toggleMusic()">
+        <i class="fas fa-music" id="music-icon"></i>
+    </div>
+
+    <script>
+        // ==================== متغيرات البيانات ====================
+        let loveData = {};
+        let typeIdx = 0;
+        let currentSlide = 0;
+
+        // ==================== فك التشفير ====================
+        function decodeData() {
+            const params = new URLSearchParams(window.location.search);
+            const data = params.get('data');
+            
+            if (!data) {
+                alert('خطأ في الرابط!');
+                window.location.href = 'index.html';
+                return;
+            }
+
+            try {
+                loveData = JSON.parse(atob(data));
+                document.getElementById('title-login').textContent = loveData.partnerName + ' 💕';
+            } catch (e) {
+                alert('خطأ في فك البيانات!');
+                window.location.href = 'index.html';
+            }
+        }
+
+        // ==================== الدخول ====================
+        function checkPass() {
+            const pass = document.getElementById('password').value;
+            if (pass === loveData.password) {
+                document.getElementById('login-screen').style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('login-screen').style.display = 'none';
+                    document.getElementById('main-content').style.display = 'block';
+                    setupContent();
+                    playAudio();
+                    startTypewriter();
+                }, 1000);
+            } else {
+                const card = document.querySelector('.login-card');
+                card.animate([{transform: 'translateX(0)'}, {transform: 'translateX(-10px)'}, {transform: 'translateX(10px)'}, {transform: 'translateX(0)'}], {duration: 300});
+                document.getElementById('error').style.display = 'block';
+            }
+        }
+
+        // ==================== إعداد المحتوى ====================
+        function setupContent() {
+            // العنوان
+            document.getElementById('main-title').textContent = `❤️ ${loveData.partnerName} ❤️`;
+            document.getElementById('card-hello').textContent = `إلى أغلى ما في حياتي ${loveData.partnerName} 🌏`;
+
+            // التاريخ
+            const date = new Date(loveData.startDate);
+            document.getElementById('start-date').textContent = date.toLocaleDateString('ar-EG');
+
+            // الأسباب
+            const reasonsContainer = document.getElementById('reasons-container');
+            const reasons = [loveData.reason1, loveData.reason2, loveData.reason3];
+            const icons = ['💓', '💎', '🧠'];
+
+            reasons.forEach((reason, idx) => {
+                const flipCard = document.createElement('div');
+                flipCard.classList.add('flip-card');
+                flipCard.onclick = function() { this.classList.toggle('flipped'); };
+                flipCard.innerHTML = `
+                    <div class="flip-card-inner">
+                        <div class="flip-front">${icons[idx]}</div>
+                        <div class="flip-back">${reason}</div>
+                    </div>
+                `;
+                reasonsContainer.appendChild(flipCard);
+            });
+
+            // الصور
+            setupSlider();
+
+            // الرسائل اليومية
+            initDailyMessages();
+
+            // الرسالة الختامية
+            document.getElementById('final-message').textContent = loveData.finalMessage;
+
+            // الموسيقى
+            if (loveData.musicUrl) {
+                document.getElementById('bg-music').src = loveData.musicUrl;
+            }
+            if (loveData.voiceUrl) {
+                document.getElementById('special-song').src = loveData.voiceUrl;
+            }
+        }
+
+        // ==================== السلايدر ====================
+        function setupSlider() {
+            const container = document.getElementById('slider-container');
+            container.innerHTML = '';
+
+            loveData.imagesUrls.forEach(url => {
+                const img = document.createElement('img');
+                img.classList.add('slide-img');
+                img.src = url;
+                img.onerror = function() {
+                    this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="350"%3E%3Crect fill="%23333" width="400" height="350"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%23aaa" font-size="18"%3Eصورة غير محملة%3C/text%3E%3C/svg%3E';
+                };
+                container.appendChild(img);
+            });
+
+            if (loveData.imagesUrls.length > 0) {
+                showSlides();
+            }
+        }
+
+        function showSlides() {
+            let slides = document.getElementsByClassName("slide-img");
+            if (slides.length === 0) return;
+
+            for (let j = 0; j < slides.length; j++) slides[j].style.display = "none";
+            currentSlide++;
+            if (currentSlide > slides.length) currentSlide = 1;
+            slides[currentSlide - 1].style.display = "block";
+            setTimeout(showSlides, 3000);
+        }
+
+        // ==================== الكتابة التلقائية ====================
+        function startTypewriter() {
+            const text = loveData.mainMessage;
+            function type() {
+                if (typeIdx < text.length) {
+                    document.getElementById("typewriter-text").innerHTML += text.charAt(typeIdx) === '\n' ? '<br>' : text.charAt(typeIdx);
+                    typeIdx++;
+                    setTimeout(type, 50);
+                }
+            }
+            type();
+        }
+
+        // ==================== مطر القلوب ====================
+        function rainHearts() {
+            const duration = 5000; 
+            const end = Date.now() + duration;
+            (function frame() {
+                const heart = document.createElement('div');
+                heart.classList.add('heart-rain');
+                heart.innerText = Math.random() > 0.5 ? '❤️' : '💍';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.fontSize = Math.random() * 20 + 20 + 'px';
+                heart.style.animationDuration = Math.random() * 2 + 3 + 's';
+                document.body.appendChild(heart);
+                setTimeout(() => heart.remove(), 5000);
+                if (Date.now() < end) requestAnimationFrame(frame);
+            }());
+        }
+
+        // ==================== العداد ====================
+        function updateCounter() {
+            const startDate = new Date(loveData.startDate).getTime();
+            const now = new Date().getTime();
+            const diff = now - startDate;
+            
+            document.getElementById("days").innerText = Math.floor(diff / (1000 * 60 * 60 * 24));
+            document.getElementById("hours").innerText = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            document.getElementById("minutes").innerText = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById("seconds").innerText = Math.floor((diff % (1000 * 60)) / 1000);
+        }
+        setInterval(updateCounter, 1000);
+
+        // ==================== الرسائل اليومية ====================
+        function initDailyMessages() {
+            const container = document.getElementById('days-container');
+            const now = new Date();
+            const startDateConfig = new Date(loveData.startDate);
+            const diffTime = now - startDateConfig;
+            const daysPassed = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+            
+            const loveMessages = [
+                loveData.msg1 || "رسالة يوم 1",
+                loveData.msg2 || "رسالة يوم 2",
+                loveData.msg3 || "رسالة يوم 3"
+            ];
+
+            container.innerHTML = '';
+
+            for (let i = 0; i < 365; i++) {
+                const dayDiv = document.createElement('div');
+                dayDiv.classList.add('day-box');
+                
+                if (i < loveMessages.length) {
+                    const msg = loveMessages[i];
+                    if (msg) {
+                        if (i <= daysPassed) {
+                            dayDiv.classList.add('unlocked');
+                            dayDiv.innerHTML = `<span>Day</span><span>${i+1}</span><i class="fas fa-lock-open" style="font-size:10px; margin-top:5px;"></i>`;
+                            dayDiv.onclick = () => alert(`💌 رسالة اليوم (${i+1}):\n\n"${msg}"`);
+                        } else {
+                            dayDiv.classList.add('locked');
+                            dayDiv.innerHTML = `<span>Day</span><span>${i+1}</span><i class="fas fa-lock" style="font-size:10px; margin-top:5px;"></i>`;
+                            dayDiv.onclick = () => {
+                                const unlockDate = new Date(startDateConfig);
+                                unlockDate.setDate(startDateConfig.getDate() + i);
+                                alert(`⛔ لسه بدري!\nالرسالة دي هتتفتح يوم: ${unlockDate.toLocaleDateString('ar-EG')}`);
+                            };
+                        }
+                    }
+                }
+                container.appendChild(dayDiv);
+            }
+
+            if (daysPassed >= 365) document.getElementById('forever-div').style.display = 'block';
+        }
+
+        // ==================== السينما ====================
+        const cinemaOverlay = document.getElementById('cinema-overlay');
+        const voiceAudio = document.getElementById('special-song');
+        const music = document.getElementById("bg-music");
+
+        function openCinemaMode() {
+            if(music) music.pause();
+            cinemaOverlay.style.display = 'flex';
+            setTimeout(() => cinemaOverlay.style.opacity = '1', 10);
+            voiceAudio.play().catch(e => alert("اضغطي ع الشاشة عشان الصوت يشتغل"));
+        }
+
+        function closeCinemaMode() {
+            cinemaOverlay.style.opacity = '0';
+            setTimeout(() => {
+                cinemaOverlay.style.display = 'none';
+                voiceAudio.pause();
+                voiceAudio.currentTime = 0;
+                if(music) music.play();
+            }, 1000);
+        }
+
+        // ==================== الموسيقى ====================
+        const fab = document.querySelector('.music-fab');
+        function playAudio() { 
+            if (music.src) {
+                music.play().then(() => fab.classList.add('rotating')).catch(() => {});
+            }
+        }
+        function toggleMusic() {
+            if (music.paused) { 
+                music.play(); 
+                fab.classList.add('rotating'); 
+            }
+            else { 
+                music.pause(); 
+                fab.classList.remove('rotating'); 
+            }
+        }
+
+        // ==================== التهيئة ====================
+        window.onload = function() {
+            decodeData();
+        };
+    </script>
+
+</body>
+</html>
