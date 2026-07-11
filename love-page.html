@@ -401,6 +401,23 @@
         let typeIdx = 0;
         let currentSlide = 0;
 
+        // ==================== دوال فك التشفير الآمنة ====================
+        function decodeURIComponentUTF8(str) {
+            try {
+                return decodeURIComponent(escape(atob(str)));
+            } catch (e) {
+                return null;
+            }
+        }
+
+        function decodeDataUTF8(str) {
+            try {
+                return JSON.parse(decodeURIComponent(escape(atob(str))));
+            } catch (e) {
+                return null;
+            }
+        }
+
         // ==================== فك التشفير ====================
         function decodeData() {
             const params = new URLSearchParams(window.location.search);
@@ -413,10 +430,18 @@
             }
 
             try {
-                loveData = JSON.parse(atob(data));
-                document.getElementById('title-login').textContent = loveData.partnerName + ' 💕';
+                loveData = decodeDataUTF8(data);
+                
+                if (!loveData) {
+                    alert('خطأ في فك البيانات!');
+                    window.location.href = 'index.html';
+                    return;
+                }
+
+                document.getElementById('title-login').textContent = (loveData.partnerName || 'حبيبي') + ' 💕';
             } catch (e) {
-                alert('خطأ في فك البيانات!');
+                console.error('Decode error:', e);
+                alert('خطأ في فك البيانات! ' + e.message);
                 window.location.href = 'index.html';
             }
         }
@@ -491,17 +516,24 @@
             const container = document.getElementById('slider-container');
             container.innerHTML = '';
 
+            if (!loveData.imagesUrls || loveData.imagesUrls.length === 0) {
+                container.innerHTML = '<p style="color: #aaa; padding: 20px;">لم يتم إضافة صور بعد 📸</p>';
+                return;
+            }
+
             loveData.imagesUrls.forEach(url => {
-                const img = document.createElement('img');
-                img.classList.add('slide-img');
-                img.src = url;
-                img.onerror = function() {
-                    this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="350"%3E%3Crect fill="%23333" width="400" height="350"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%23aaa" font-size="18"%3Eصورة غير محملة%3C/text%3E%3C/svg%3E';
-                };
-                container.appendChild(img);
+                if (url && url.trim()) {
+                    const img = document.createElement('img');
+                    img.classList.add('slide-img');
+                    img.src = url.trim();
+                    img.onerror = function() {
+                        this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="400" height="350"%3E%3Crect fill="%23333" width="400" height="350"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" dy=".3em" fill="%23aaa" font-size="18"%3Eصورة غير محملة%3C/text%3E%3C/svg%3E';
+                    };
+                    container.appendChild(img);
+                }
             });
 
-            if (loveData.imagesUrls.length > 0) {
+            if (container.querySelectorAll('.slide-img').length > 0) {
                 showSlides();
             }
         }
@@ -519,7 +551,7 @@
 
         // ==================== الكتابة التلقائية ====================
         function startTypewriter() {
-            const text = loveData.mainMessage;
+            const text = loveData.mainMessage || '';
             function type() {
                 if (typeIdx < text.length) {
                     document.getElementById("typewriter-text").innerHTML += text.charAt(typeIdx) === '\n' ? '<br>' : text.charAt(typeIdx);
@@ -580,23 +612,20 @@
                 const dayDiv = document.createElement('div');
                 dayDiv.classList.add('day-box');
                 
-                if (i < loveMessages.length) {
-                    const msg = loveMessages[i];
-                    if (msg) {
-                        if (i <= daysPassed) {
-                            dayDiv.classList.add('unlocked');
-                            dayDiv.innerHTML = `<span>Day</span><span>${i+1}</span><i class="fas fa-lock-open" style="font-size:10px; margin-top:5px;"></i>`;
-                            dayDiv.onclick = () => alert(`💌 رسالة اليوم (${i+1}):\n\n"${msg}"`);
-                        } else {
-                            dayDiv.classList.add('locked');
-                            dayDiv.innerHTML = `<span>Day</span><span>${i+1}</span><i class="fas fa-lock" style="font-size:10px; margin-top:5px;"></i>`;
-                            dayDiv.onclick = () => {
-                                const unlockDate = new Date(startDateConfig);
-                                unlockDate.setDate(startDateConfig.getDate() + i);
-                                alert(`⛔ لسه بدري!\nالرسالة دي هتتفتح يوم: ${unlockDate.toLocaleDateString('ar-EG')}`);
-                            };
-                        }
-                    }
+                const msg = loveMessages[i] || `رسالة يوم ${i+1}`;
+                
+                if (i <= daysPassed) {
+                    dayDiv.classList.add('unlocked');
+                    dayDiv.innerHTML = `<span>Day</span><span>${i+1}</span><i class="fas fa-lock-open" style="font-size:10px; margin-top:5px;"></i>`;
+                    dayDiv.onclick = () => alert(`💌 رسالة اليوم (${i+1}):\n\n"${msg}"`);
+                } else {
+                    dayDiv.classList.add('locked');
+                    dayDiv.innerHTML = `<span>Day</span><span>${i+1}</span><i class="fas fa-lock" style="font-size:10px; margin-top:5px;"></i>`;
+                    dayDiv.onclick = () => {
+                        const unlockDate = new Date(startDateConfig);
+                        unlockDate.setDate(startDateConfig.getDate() + i);
+                        alert(`⛔ لسه بدري!\nالرسالة دي هتتفتح يوم: ${unlockDate.toLocaleDateString('ar-EG')}`);
+                    };
                 }
                 container.appendChild(dayDiv);
             }
