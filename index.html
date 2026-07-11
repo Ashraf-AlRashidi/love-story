@@ -284,38 +284,53 @@
     </div>
 
     <script>
+        // ==================== دالة تشفير آمنة للعربية ====================
+        function encodeURIComponentUTF8(str) {
+            return btoa(unescape(encodeURIComponent(str)));
+        }
+
+        function encodeDataUTF8(obj) {
+            return btoa(unescape(encodeURIComponent(JSON.stringify(obj))));
+        }
+
+        // ==================== معالج الفورم ====================
         document.getElementById('loveForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
-            // جمع البيانات
-            const formData = {
-                yourName: document.querySelector('input[name="yourName"]').value,
-                partnerName: document.querySelector('input[name="partnerName"]').value,
-                startDate: document.querySelector('input[name="startDate"]').value,
-                password: document.querySelector('input[name="password"]').value || "11/11",
-                mainMessage: document.querySelector('textarea[name="mainMessage"]').value,
-                reason1: document.querySelector('input[name="reason1"]').value,
-                reason2: document.querySelector('input[name="reason2"]').value,
-                reason3: document.querySelector('input[name="reason3"]').value,
-                musicUrl: document.querySelector('input[name="musicUrl"]').value,
-                imagesUrls: document.querySelector('textarea[name="imagesUrls"]').value.split('\n').filter(url => url.trim()),
-                voiceUrl: document.querySelector('input[name="voiceUrl"]').value,
-                msg1: document.querySelector('input[name="msg1"]').value || "رسالة يوم 1",
-                msg2: document.querySelector('input[name="msg2"]').value || "رسالة يوم 2",
-                msg3: document.querySelector('input[name="msg3"]').value || "رسالة يوم 3",
-                finalMessage: document.querySelector('textarea[name="finalMessage"]').value || "بحبك ❤️"
-            };
+            try {
+                // جمع البيانات
+                const formData = {
+                    yourName: document.querySelector('input[name="yourName"]').value,
+                    partnerName: document.querySelector('input[name="partnerName"]').value,
+                    startDate: document.querySelector('input[name="startDate"]').value,
+                    password: document.querySelector('input[name="password"]').value || "11/11",
+                    mainMessage: document.querySelector('textarea[name="mainMessage"]').value,
+                    reason1: document.querySelector('input[name="reason1"]').value,
+                    reason2: document.querySelector('input[name="reason2"]').value,
+                    reason3: document.querySelector('input[name="reason3"]').value,
+                    musicUrl: document.querySelector('input[name="musicUrl"]').value,
+                    imagesUrls: document.querySelector('textarea[name="imagesUrls"]').value.split('\n').filter(url => url.trim()),
+                    voiceUrl: document.querySelector('input[name="voiceUrl"]').value,
+                    msg1: document.querySelector('input[name="msg1"]').value || "رسالة يوم 1",
+                    msg2: document.querySelector('input[name="msg2"]').value || "رسالة يوم 2",
+                    msg3: document.querySelector('input[name="msg3"]').value || "رسالة يوم 3",
+                    finalMessage: document.querySelector('textarea[name="finalMessage"]').value || "بحبك ❤️"
+                };
 
-            // تشفير البيانات (Base64)
-            const encoded = btoa(JSON.stringify(formData));
-            
-            // إنشاء الرابط
-            const link = `love-page.html?data=${encoded}`;
-            
-            // عرض الرابط في popup
-            const shareUrl = window.location.origin + window.location.pathname.replace('index.html', '') + link;
-            
-            showShareModal(shareUrl);
+                // تشفير البيانات بطريقة آمنة للعربية
+                const encoded = encodeDataUTF8(formData);
+                
+                // إنشاء الرابط
+                const link = `love-page.html?data=${encoded}`;
+                
+                // عرض الرابط في popup
+                const shareUrl = window.location.origin + window.location.pathname.replace('index.html', '') + link;
+                
+                showShareModal(shareUrl);
+            } catch (error) {
+                alert('خطأ في معالجة البيانات: ' + error.message);
+                console.error(error);
+            }
         });
 
         function showShareModal(url) {
@@ -355,6 +370,8 @@
                         word-break: break-all;
                         color: #eee;
                         font-size: 0.9rem;
+                        max-height: 150px;
+                        overflow-y: auto;
                     ">
                         ${url}
                     </div>
@@ -374,6 +391,7 @@
                         font-size: 1rem;
                         margin-right: 10px;
                         transition: 0.3s;
+                        width: 48%;
                     ">
                         📋 انسخ الرابط
                     </button>
@@ -387,6 +405,7 @@
                         cursor: pointer;
                         font-size: 1rem;
                         transition: 0.3s;
+                        width: 48%;
                     ">
                         👀 اعرض الموقع
                     </button>
