@@ -320,11 +320,12 @@
                 // تشفير البيانات بطريقة آمنة للعربية
                 const encoded = encodeDataUTF8(formData);
                 
-                // إنشاء الرابط
+                // إنشاء الرابط - الحل: استخدام relative path مباشرة
                 const link = `love-page.html?data=${encoded}`;
                 
-                // عرض الرابط في popup
-                const shareUrl = window.location.origin + window.location.pathname.replace('index.html', '') + link;
+                // الحل الصحيح: استخدام window.location.href للحصول على الـ base URL
+                const baseURL = window.location.href.split('/').slice(0, -1).join('/') + '/';
+                const shareUrl = baseURL + link;
                 
                 showShareModal(shareUrl);
             } catch (error) {
