@@ -163,6 +163,56 @@
         .required {
             color: var(--primary);
         }
+
+        .music-source-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+        }
+
+        .music-tab {
+            flex: 1;
+            min-width: 80px;
+            padding: 10px;
+            border: 2px solid #333;
+            border-radius: 8px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #aaa;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .music-tab.active {
+            border-color: var(--primary);
+            background: rgba(255, 0, 85, 0.2);
+            color: var(--primary);
+        }
+
+        .music-tab:hover {
+            transform: translateY(-2px);
+        }
+
+        .music-content {
+            display: none;
+        }
+
+        .music-content.active {
+            display: block;
+        }
+
+        .note {
+            font-size: 0.85rem;
+            color: #aaa;
+            margin-top: 8px;
+            padding: 8px;
+            background: rgba(255, 0, 85, 0.1);
+            border-radius: 5px;
+            border-left: 2px solid var(--primary);
+        }
     </style>
 </head>
 <body>
@@ -232,9 +282,48 @@
             <div class="form-section">
                 <div class="section-title">📸 الوسائط (صور وموسيقى)</div>
                 
+                <!-- الموسيقى الخلفية - نظام Tabs -->
                 <div class="form-group">
-                    <label>رابط الموسيقى الخلفية (يوتيوب أو رابط مباشر)</label>
-                    <input type="url" name="musicUrl" placeholder="https://example.com/song.mp3">
+                    <label>🎵 الموسيقى الخلفية</label>
+                    
+                    <div class="music-source-tabs">
+                        <div class="music-tab active" onclick="switchMusicTab(this, 'direct')">🎧 مباشر</div>
+                        <div class="music-tab" onclick="switchMusicTab(this, 'youtube')">🎬 YouTube</div>
+                        <div class="music-tab" onclick="switchMusicTab(this, 'soundcloud')">☁️ SoundCloud</div>
+                        <div class="music-tab" onclick="switchMusicTab(this, 'spotify')">🎵 Spotify</div>
+                    </div>
+
+                    <!-- رابط مباشر -->
+                    <div class="music-content active" id="music-direct">
+                        <input type="url" name="musicUrl" placeholder="https://example.com/song.mp3">
+                        <div class="note">
+                            <i class="fas fa-info-circle"></i> رابط مباشر لملف MP3 (يجب أن يكون HTTPS)
+                        </div>
+                    </div>
+
+                    <!-- YouTube -->
+                    <div class="music-content" id="music-youtube">
+                        <input type="text" name="youtubeUrl" placeholder="https://www.youtube.com/watch?v=...">
+                        <div class="note">
+                            <i class="fas fa-info-circle"></i> انسخ رابط الفيديو من YouTube
+                        </div>
+                    </div>
+
+                    <!-- SoundCloud -->
+                    <div class="music-content" id="music-soundcloud">
+                        <input type="url" name="soundcloudUrl" placeholder="https://soundcloud.com/...">
+                        <div class="note">
+                            <i class="fas fa-info-circle"></i> انسخ رابط الأغنية من SoundCloud
+                        </div>
+                    </div>
+
+                    <!-- Spotify -->
+                    <div class="music-content" id="music-spotify">
+                        <input type="text" name="spotifyTrackId" placeholder="مثال: 4cOdkLwLk6amzJLXQxi5Os">
+                        <div class="note">
+                            <i class="fas fa-info-circle"></i> ضع Spotify Track ID (الرقم الطويل من رابط الأغنية)
+                        </div>
+                    </div>
                 </div>
 
                 <div class="form-group">
@@ -284,6 +373,22 @@
     </div>
 
     <script>
+        // ==================== تبديل تاب الموسيقى ====================
+        function switchMusicTab(element, tab) {
+            // إخفاء جميع الـ contents
+            document.querySelectorAll('.music-content').forEach(el => {
+                el.classList.remove('active');
+            });
+            // إزالة active من جميع الـ tabs
+            document.querySelectorAll('.music-tab').forEach(el => {
+                el.classList.remove('active');
+            });
+            
+            // إظهار المحتوى المختار
+            document.getElementById('music-' + tab).classList.add('active');
+            element.classList.add('active');
+        }
+
         // ==================== دالة تشفير آمنة للعربية ====================
         function encodeURIComponentUTF8(str) {
             return btoa(unescape(encodeURIComponent(str)));
@@ -298,6 +403,29 @@
             e.preventDefault();
 
             try {
+                // تحديد مصدر الموسيقى
+                let musicUrl = '';
+                let musicSource = 'none';
+                
+                const directMusic = document.querySelector('input[name="musicUrl"]').value;
+                const youtubeMusic = document.querySelector('input[name="youtubeUrl"]').value;
+                const soundcloudMusic = document.querySelector('input[name="soundcloudUrl"]').value;
+                const spotifyTrackId = document.querySelector('input[name="spotifyTrackId"]').value;
+
+                if (directMusic) {
+                    musicUrl = directMusic;
+                    musicSource = 'direct';
+                } else if (youtubeMusic) {
+                    musicUrl = youtubeMusic;
+                    musicSource = 'youtube';
+                } else if (soundcloudMusic) {
+                    musicUrl = soundcloudMusic;
+                    musicSource = 'soundcloud';
+                } else if (spotifyTrackId) {
+                    musicUrl = spotifyTrackId;
+                    musicSource = 'spotify';
+                }
+
                 // جمع البيانات
                 const formData = {
                     yourName: document.querySelector('input[name="yourName"]').value,
@@ -308,7 +436,8 @@
                     reason1: document.querySelector('input[name="reason1"]').value,
                     reason2: document.querySelector('input[name="reason2"]').value,
                     reason3: document.querySelector('input[name="reason3"]').value,
-                    musicUrl: document.querySelector('input[name="musicUrl"]').value,
+                    musicUrl: musicUrl,
+                    musicSource: musicSource,
                     imagesUrls: document.querySelector('textarea[name="imagesUrls"]').value.split('\n').filter(url => url.trim()),
                     voiceUrl: document.querySelector('input[name="voiceUrl"]').value,
                     msg1: document.querySelector('input[name="msg1"]').value || "رسالة يوم 1",
@@ -320,10 +449,8 @@
                 // تشفير البيانات بطريقة آمنة للعربية
                 const encoded = encodeDataUTF8(formData);
                 
-                // إنشاء الرابط - الحل: استخدام relative path مباشرة
+                // إنشاء الرابط
                 const link = `love-page.html?data=${encoded}`;
-                
-                // الحل الصحيح: استخدام window.location.href للحصول على الـ base URL
                 const baseURL = window.location.href.split('/').slice(0, -1).join('/') + '/';
                 const shareUrl = baseURL + link;
                 
